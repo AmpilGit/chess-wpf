@@ -80,7 +80,7 @@ namespace chess.com
                     figuresarr.figures[x2, y2] = "чпешка2";
                 }
             }
-            if (x + 1 == x2 && y + 1 == y2 && figuresarr.figures[x2, y2] != null)
+            if (x + 1 == x2 && (y + 1 == y2||y-1==y2) && figuresarr.figures[x2, y2] != null)
             {
 
                 figuresarr.figures[x, y] = null;
@@ -88,7 +88,6 @@ namespace chess.com
                 mogno = true;
                 if (x2 == 7)
                 {
-                    MessageBox.Show("xathpm");
                     image.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/чферзь.jpg"));
                     image.Name = "чферзь";
                     figuresarr.figures[x, y] = null;

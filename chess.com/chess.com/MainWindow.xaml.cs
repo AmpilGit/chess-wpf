@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -6,6 +7,29 @@ namespace chess.com
 {
     public partial class MainWindow : Window
     {
+        public class VisualHelper
+        {
+            public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+            {
+                if (depObj != null)
+                {
+                    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                    {
+                        DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                        if (child != null && child is T)
+                        {
+                            yield return (T)child;
+                        }
+
+                        foreach (T childOfChild in FindVisualChildren<T>(child))
+                        {
+                            yield return childOfChild;
+                        }
+                    }
+                }
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -98,11 +122,13 @@ namespace chess.com
             {
                 img.Name = "бкороль";
                 img.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/бкороль.jpeg"));
+                bkorol = img;
             }
             if (name == "чкороль")
             {
                 img.Name = "чкороль";
                 img.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/чкороль.jpg"));
+                chkorol = img;
             }
             if (name == "бферзь")
             {
@@ -122,14 +148,59 @@ namespace chess.com
         public static bool flag = false;//переменная для проверки второго нажатия на клетку
         public static object figure;
         public static object figure2;
+        public static Image chkorol;
+        public static Image bkorol;
+        public static int counterchahch = 0;
+        public static bool chah;
         private void Active(object sender, RoutedEventArgs e)
-        {
+        {// обработка шаха область
+
+            //обработка шаха конец сначала для черных
             if (flag)
             {
                 firstpos = sender;
+                string[,] massdo = figuresarr.figures;
                 bool mogno = rulesmain.rules(figure, firstpos, figuresarr.figures, 0);
+                if (hody.hodch)
+                {
+                    foreach (var image in VisualHelper.FindVisualChildren<Image>(stack))
+                    {
+                        var figurechah = image as Image;
+                        chah = chahblack.rules(figurechah, chkorol, figuresarr.figures, 0);
+                        if (chah)
+                        {
+                            mogno = false;
+                            break;
+                        }
+                    }
+                }
+                if (hody.hodb)
+                {
+                    foreach (var image in VisualHelper.FindVisualChildren<Image>(stack))
+                    {
+                        var figurechah = image as Image;
+                        chah = chahwhite.rules(figurechah, bkorol, figuresarr.figures, 0);
+                        if (chah)
+                        {
+                            figuresarr.figures = massdo;
+                            mogno = false;
+                            break;
+                        }
+                    }
+                }
+                string str = "";
+                for(int i = 0; i < 8; i++)
+                {
+                    for(int j = 0; j < 8; j++)
+                    {
+                        str += figuresarr.figures[i, j] + i + j + chah + mogno + " ";
+                    }
+                }
+                MessageBox.Show(str);
                 if (sender is Image && mogno)
                 {
+                    hody.hodch = !hody.hodch;
+                    hody.hodb = !hody.hodb;
                     var ii = sender as Image;
 
                     int column = Grid.GetColumn(ii);
@@ -142,7 +213,7 @@ namespace chess.com
                     int rowfigure = Grid.GetRow(figurecopy);
                     var figuredelete = figure as Image;
                     stack.Children.Remove(figuredelete);
-                    if (bpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
+                    if (figurecopy.Name == "бпешка" && bpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
                     {
                         figurecopy.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/бферзь.jpeg"));
                         figurecopy.Name = "бферзь";
@@ -153,9 +224,8 @@ namespace chess.com
                     }
                     else
                     {
-                        if (chpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
+                        if (figurecopy.Name == "чпешка" && chpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
                         {
-                            MessageBox.Show("чферзь");
                             figurecopy.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/чферзь.jpg"));
                             figurecopy.Name = "чферзь";
                             Grid.SetColumn(figurecopy, column);
@@ -174,6 +244,8 @@ namespace chess.com
                 }
                 if (sender is Button && mogno)
                 {
+                    hody.hodch = !hody.hodch;
+                    hody.hodb = !hody.hodb;
                     var ii = sender as Button;
                     var figurecopy = figure as Image;
                     int row = Grid.GetRow(ii);
@@ -182,32 +254,35 @@ namespace chess.com
                     int columnfigure = Grid.GetColumn(figurecopy);
                     int rowfigure = Grid.GetRow(figurecopy);
                     stack.Children.Remove(figuredelete);
-                    if (bpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
+                    if (figurecopy.Name == "бпешка" && bpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
                     {
                         figurecopy.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/бферзь.jpeg"));
                         figurecopy.Name = "бферзь";
                         Grid.SetColumn(figurecopy, column);
                         Grid.SetRow(figurecopy, row);
                         stack.Children.Add(figurecopy);
-                    }
-                    if (chpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
-                    {
-                        MessageBox.Show("чферзь");
-                        figurecopy.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/чферзь.jpg"));
-                        figurecopy.Name = "чферзь";
-                        Grid.SetColumn(figurecopy, column);
-                        Grid.SetRow(figurecopy, row);
-                        stack.Children.Add(figurecopy);
+                        bferz = false;
                     }
                     else
                     {
-                        MessageBox.Show(chpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0).ToString());
-                        Grid.SetColumn(figurecopy, column);
-                        Grid.SetRow(figurecopy, row);
-                        stack.Children.Add(figurecopy);
+                        if (figurecopy.Name == "чпешка" && chpeshka.bpeshkarule2(figure, firstpos, figuresarr.figures, 0))
+                        {
+                            figurecopy.Source = new BitmapImage(new System.Uri("pack://application:,,,/Resources/чферзь.jpg"));
+                            figurecopy.Name = "чферзь";
+                            Grid.SetColumn(figurecopy, column);
+                            Grid.SetRow(figurecopy, row);
+                            stack.Children.Add(figurecopy);
+                        }
+                        else
+                        {
+                            Grid.SetColumn(figurecopy, column);
+                            Grid.SetRow(figurecopy, row);
+                            stack.Children.Add(figurecopy);
+                        }
                     }
                     mogno = false;
                     forbor();
+
                 }
 
                 flag = false;
@@ -217,7 +292,6 @@ namespace chess.com
             {
                 if (sender is Image)
                 {
-
                     ActiveSecond(sender);
                 }
             }
@@ -265,6 +339,8 @@ namespace chess.com
             stack.Children.Add(img);
             flag = true;
         }
+
+
     }
 
 

@@ -22,7 +22,7 @@ namespace chess.com
             if (secondsender is Image)
             {
                 image = secondsender as Image;
-                if (image.Name[0] == 'б') 
+                if (image.Name[0] == 'б')
                 { cvet = false; }
                 else { cvet = true; }
             }
@@ -152,6 +152,7 @@ namespace chess.com
                             if (figures[ycopy, x] != null)
                             {
                                 count += 1;
+
                             }
                         }
                     }
@@ -254,14 +255,11 @@ namespace chess.com
                     }
                     if (count == 0)
                     {
-                        if (y3 == x3 || x3 == y3 * -1)
-                        {
-                            figurerules.Name = "бферзь";
-                            figures[y, x] = null;
-                            figures[y2, x2] = "бферзь";
-                            mogno = true;
-                            count = 0;
-                        }
+                        figurerules.Name = "бферзь";
+                        figures[y, x] = null;
+                        figures[y2, x2] = "бферзь";
+                        mogno = true;
+                        count = 0;
 
                     }
                 }
@@ -272,8 +270,8 @@ namespace chess.com
                     {
                         mogno = true;
                     }
-                    else
-                    {
+                    else 
+                    { 
                         while (ycopy != y2 + 1 && xcopy != x2 + 1)
                         {
                             ycopy -= 1;

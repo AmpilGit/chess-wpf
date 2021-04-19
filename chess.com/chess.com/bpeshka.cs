@@ -42,7 +42,6 @@ namespace chess.com
                 {
                     if (figuresarr.figures[x - 1, y2] == null && figuresarr.figures[x2, y2] == null)
                     {
-                        MessageBox.Show("bpeshka2");
                         mogno = true;
                         figuresarr.figures[x, y] = null;
                         figuresarr.figures[x2, y2] = "бпешка2";
