@@ -1,0 +1,15 @@
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.csprojAssemblyReference.cache
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\App.g.cs
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com_MarkupCompile.cache
+C:\Users\user\source\repos\chess.com\chess.com\bin\Debug\chess.com.exe.config
+C:\Users\user\source\repos\chess.com\chess.com\bin\Debug\chess.com.exe
+C:\Users\user\source\repos\chess.com\chess.com\bin\Debug\chess.com.pdb
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\MainWindow.g.cs
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com_MarkupCompile.lref
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\MainWindow.baml
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.g.resources
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.Properties.Resources.resources
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.csproj.GenerateResource.cache
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.exe
+C:\Users\user\source\repos\chess.com\chess.com\obj\Debug\chess.com.pdb
